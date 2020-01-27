@@ -30,6 +30,12 @@ X = [ones(m, 1) X];
 %       for each row.
 %       
 
+% Get the sigmoid of X * all_theta to the inverse
+predict = sigmoid(X * all_theta');
+
+[predict_max, index_max] = max(predict, [], 2);
+p = index_max;
+
 
 
 
