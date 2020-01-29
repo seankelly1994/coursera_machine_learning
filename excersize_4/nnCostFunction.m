@@ -79,9 +79,11 @@ a3 = sigmoid(z3);
 h_x = a3;
 
 y_vector = zeros(m, num_labels);
+
 for i = 1:m
     y_vector(i, y(i)) = 1;
 end
+
 
 % Cost function
 % Cost function now uses the y_vector which we initialised y subscript k superscript i is equal to the y_vector
@@ -89,12 +91,41 @@ end
 
 J = (1/m) * sum(sum(- y_vector .* log(h_x) - (1 - y_vector) .* log(1 - h_x)));
 
+A1 = X;
+
+Z2 = A1 * Theta1';
+A2 = sigmoid(Z2);
+A2 = [ones(size(A2, 1), 1), A2];
+
+Z3 = A2 * Theta2';
+A3 = sigmoid(Z3);
+
+y_vector = zeros(m, num_labels);
+
+for i = 1:m
+    y_vector(i, y(i)) = 1;
+end
+
+DELTA3 = A3 - y_vector;
+DELTA2 = (DELTA3 * Theta2) .* [ones(size(Z2,1),1) sigmoidGradient(Z2)];
+DELTA2 = DELTA2(:,2:end);
+
+Theta1_grad = (1/m) * (DELTA2' * A1);
+Theta2_grad = (1/m) * (DELTA3' * A2);
+
 % So no we do regularization function this is same as previous + additional using Theta1 and Theta2 instead of h_x
 
 regularization_term = (lambda/(2*m)) * (sum(sum(Theta1(:,2:end).^2)) + sum(sum(Theta2(:,2:end).^2)));
 
 % Cost function now is J + regularization_term
 J = J + regularization_term
+
+Theta1_grad_regularization_term = (lambda/m) * [zeros(size(Theta1, 1), 1) Theta1(:,2:end)];
+Theta2_grad_regularization_term = (lambda/m) * [zeros(size(Theta2, 1), 1) Theta2(:,2:end)];
+
+
+Theta1_grad = Theta1_grad + Theta1_grad_regularization_term;
+Theta2_grad = Theta2_grad + Theta2_grad_regularization_term;
 
 % -------------------------------------------------------------
 
