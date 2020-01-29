@@ -89,7 +89,12 @@ end
 
 J = (1/m) * sum(sum(- y_vector .* log(h_x) - (1 - y_vector) .* log(1 - h_x)));
 
-% J = 1/m * sum(sum(-1 * y_vector .* log(h_x)-(1 - y_vector) .* log(1 - h_x)));
+% So no we do regularization function this is same as previous + additional using Theta1 and Theta2 instead of h_x
+
+regularization_term = (lambda/(2*m)) * (sum(sum(Theta1(:,2:end).^2)) + sum(sum(Theta2(:,2:end).^2)));
+
+% Cost function now is J + regularization_term
+J = J + regularization_term
 
 % -------------------------------------------------------------
 
