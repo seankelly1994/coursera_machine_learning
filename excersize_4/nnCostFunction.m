@@ -62,23 +62,34 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+% Random set
+X = [ones(m,1), X]
 
+% Slide 6 activating the layers
+% This is needed to perform non linear mapping
+a1 = X;
 
+z2 = a1 * Theta1';
+a2 = sigmoid(z2);
+a2 = [ones(size(a2,1),1), a2]
 
+z3 = a2 * Theta2';
+a3 = sigmoid(z3);
 
+h_x = a3;
 
+y_vector = zeros(m, num_labels);
+for i = 1:m
+    y_vector(i, y(i)) = 1;
+end
 
+% Cost function
+% Cost function now uses the y_vector which we initialised y subscript k superscript i is equal to the y_vector
+% J = (1/m) * sum(sum(- y_vector .* log(h_x) - (1 - y_vector) .* log(1 - h_x)))
 
+J = (1/m) * sum(sum(- y_vector .* log(h_x) - (1 - y_vector) .* log(1 - h_x)));
 
-
-
-
-
-
-
-
-
-
+% J = 1/m * sum(sum(-1 * y_vector .* log(h_x)-(1 - y_vector) .* log(1 - h_x)));
 
 % -------------------------------------------------------------
 
